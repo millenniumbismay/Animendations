@@ -1,0 +1,15 @@
+h1 {
+    text-align:center;
+}
+
+.grid-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+    grid-gap: 10px;
+}
+
+.grid-item {
+    background-color: #ffc3a0;
+    padding: 20px;
+    text-align: center;
+}
