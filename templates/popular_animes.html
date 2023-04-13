@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <title>Animendations</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="description" content="" />
+  <link rel="icon" href="favicon.png">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/popular_animes.css') }}">
+
+</head>
+<body>
+    <h1> Popular Animes That You May Like </h1>
+    
+    {% for img in imglink %}
+    <h2>{{ genre[loop.index - 1] }}</h2>
+	<div class="grid-container">
+	    {% for link in img %}
+			<div class="grid-item">
+                <img src={{link}} width="200" height="200"/>
+            </div>
+        
+        {% endfor %}
+	</div>
+    {% endfor %}
+
+</body>
+</html>

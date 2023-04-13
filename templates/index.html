@@ -7,8 +7,138 @@
   <meta name="description" content="" />
   <link rel="icon" href="favicon.png">
   <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
+  
+  
+
 </head>
 <body>
   <h1>Animendations</h1>
+   
+  <h2 style="display: inline-block;"> Choose your top three favorite anime genres! </h2>
+  <form style="display: inline-block;" id="send" action="/genres" method="POST" onsubmit="genre()">
+       
+    <input  type="submit" id="genreSubmit" />
+    <input type="hidden" name="jsonval" value=""/>
+    
+  </form>
+  
+	
+  
+
+  <div class="grid-container">
+		<div class="card" onclick="handleCardClick(event)">
+			<h2>Comedy</h2>
+		</div>
+		<div class="card" onclick="handleCardClick(event)">
+			<h2>Action</h2>
+		</div>
+		<div class="card" onclick="handleCardClick(event)">
+			<h2>Fantasy</h2>
+		</div>
+		<div class="card" onclick="handleCardClick(event)">
+			<h2>Adventure</h2>
+		</div>
+		<div class="card" onclick="handleCardClick(event)">
+			<h2>Sci-Fi</h2>
+		</div>
+		<div class="card" onclick="handleCardClick(event)">
+			<h2>Kids</h2>
+		</div>
+		<div class="card" onclick="handleCardClick(event)">
+			<h2>Drama</h2>
+		</div>
+		<div class="card" onclick="handleCardClick(event)">
+			<h2>Shounen</h2>
+		</div>
+		<div class="card" onclick="handleCardClick(event)">
+			<h2>Music</h2>
+		</div>
+		<div class="card" onclick="handleCardClick(event)">
+			<h2>Romance</h2>
+		</div>
+		<div class="card" onclick="handleCardClick(event)">
+			<h2>Slice of Life</h2>
+		</div>
+		<div class="card" onclick="handleCardClick(event)">
+			<h2>School</h2>
+		</div>
+    <div class="card" onclick="handleCardClick(event)">
+			<h2>Supernatural</h2>
+		</div>
+		<div class="card" onclick="handleCardClick(event)">
+			<h2>Mecha</h2>
+		</div>
+		<div class="card" onclick="handleCardClick(event)">
+			<h2>Historical</h2>
+		</div>
+    <div class="card" onclick="handleCardClick(event)">
+			<h2>Magic</h2>
+		</div>
+		<div class="card" onclick="handleCardClick(event)">
+			<h2>Seinen</h2>
+		</div>
+		<div class="card" onclick="handleCardClick(event)">
+			<h2>Ecchi</h2>
+		</div>
+    <div class="card" onclick="handleCardClick(event)">
+			<h2>Sports</h2>
+		</div>
+		<div class="card" onclick="handleCardClick(event)">
+			<h2>Mystery</h2>
+		</div>
+    <div class="card" onclick="handleCardClick(event)">
+			<h2>Shoujo</h2>
+		</div>
+		<div class="card" onclick="handleCardClick(event)">
+			<h2>Parody</h2>
+		</div>
+		<div class="card" onclick="handleCardClick(event)">
+			<h2>Dementia</h2>
+		</div>
+    <div class="card" onclick="handleCardClick(event)">
+			<h2>Super Power</h2>
+		</div>
+	</div>
+  
+  
+
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+  <script>
+		function handleCardClick(event) {
+			var card = event.target;
+      var h2_card = card.querySelector('h2');
+      if (h2_card != undefined) {
+        card.querySelector('h2').classList.toggle("selected");
+      }
+      else {
+        card.classList.toggle("selected");
+      }
+		};
+
+    function genre () {
+      var selectedCards = document.querySelectorAll(".selected");
+
+			// Get the h2 value of each selected card
+			var h2Values = [];
+			selectedCards.forEach(function(selectedCard) {
+        var h2_card = selectedCard.querySelector('h2');
+        var h2Value = '';
+        if (h2_card != undefined) {
+          h2Value = selectedCard.querySelector("h2").textContent;
+        }
+        else {
+          h2Value = selectedCard.textContent;
+        }
+				
+				h2Values.push(h2Value);
+			});
+
+      data =  {genre1 : h2Values[0], genre2 : h2Values[1], genre3 : h2Values[2]};
+      var formInfo = document.forms['send'];
+      formInfo.jsonval.value = JSON.stringify(data);
+  };
+	</script>
+
+
 </body>
 </html>
