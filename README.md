@@ -59,8 +59,9 @@ Architecture: AE(
 ```
 2. Optimizer: ```Adam(model.parameters(), lr = 0.1, weight_decay = 1e-5)```
 3. Scheduler: ```ReduceLROnPlateau(optimizer, mode='min', factor=0.1, patience=2)```
-4. Number of epochs = ```40```
-5. Final Training Loss: ```0.001113555976189673```
-6. Model, Embeddings and Compressed embeddings are pickled and present in ```synopsis_autoencoder``` folder
+4. Number of epochs = ```50```
+5. Final Training Loss: ```0.001113589```
+6. Model, Embeddings and Compressed embeddings are pickled and present in ```synopsis_autoencoder``` folder. The embeddings are in dictionary format: ```sentence_embeddings_dict.pickle: {uid: [embedding tensor of 1x786]}``` and ```compressed_synopsis_embeddings.pickle: {uid: [embedding tensor of 50]}```
+7. Name of Model: ```synopsis_autoencoder_50_epochs_Adam.pickle```
 
 The model will be updated with better parameters and reported here if any changes are done
