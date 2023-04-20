@@ -1,6 +1,6 @@
 # Animendations
 #### Project for ISR(CSCE670) - Spring'23 - Texas A&M University 
-Anime Recommendations using CBCF, VBPR and NLPBPR
+Anime Recommendations using alternative approaches such as Item-Item CF, AutoRec, and Content-Boosted Collaborative Filtering (CBCF)
 
 ## Pre-processing
 1. Dropped duplicates values wrt uid in animes
@@ -13,6 +13,35 @@ Anime Recommendations using CBCF, VBPR and NLPBPR
 8. Cleaned 'favorites_anime' in profiles table
 9. Cleaned 'scores' in reviews table
 10. Removed unnecessary review texts and stored them in 'text' in reviews table
+
+
+## AutoRec
+An Autoencoder model has been trained on the data to account for the high sparsity in the user-item rating matrix. As the Autoencoder is a traditionally effective strategy to address this challenge of sparsity, we aim to compare the loss metric against other approaches we will take.
+
+### Hyperparameters
+Final hidden layer encoding dimension = 50
+
+### Model Architecture For Training
+1. Trained an autoencoder network ```[num_animes > encoding_dim * 2 > encoding_dim > encoding_dim * 2 > num_animes]```
+```
+Architecture: AE(
+  (encoder): Sequential(
+    (0): Linear(in_features=num_items, out_features=encoding_dim*2)
+    (1): ReLU()
+    (2): Linear(in_features=encoding_dim*2, out_features=encoding_dim)
+    (3): ReLU()
+  )
+  (decoder): Sequential(
+    (0): Linear(in_features=encoding_dim, out_features=encoding_dim * 2)
+    (1): ReLU()
+    (2): Linear(in_features=encoding_dim * 2, out_features=num_animes)
+    (3): Sigmoid()
+  )
+)
+```
+2. Optimizer: ```torch.optim.RMSprop(model.parameters(), lr=0.0001)```
+3. Number of epochs = ```50```
+4. Final Test RMSE Loss: ```2.1068```
 
 ## Synopsis Embeddings
 Synopsis Embeddings has been created to cater to multiple downstream tasks such as sentence similarity, compressing to use for NLPBPR, Model with CBCF to fill some missing values, etc. Following steps have been taken:
