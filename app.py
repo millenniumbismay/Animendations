@@ -15,30 +15,49 @@ def clean_genres(genres):
   """
   genres = genres[1:-1].strip().split(',')
   for genre in range(5):
-      genres[genre] = "/static/zipped_index_based_images/index_based_images/" + genres[genre].strip() + ".jpg"
+      genres[genre] = "/static/index_based_images/" + genres[genre].strip() + ".jpg"
   return genres[0:5]
+
+def gettitlefromgenre(genres):
+    genres = genres[1:-1].strip().split(',')
+    #app.logger.warning(genres)
+    #app.logger.warning(type(genres))
+    anime_data = pd.read_csv('new_preprocessed_animes.csv')
+    for genre in range(5):
+        #app.logger.warning(int(genres[genre][1:-1]))
+        data = anime_data[anime_data['uid']==int(genres[genre].replace(" ", ""))]
+        #app.logger.warning(data)
+        result2 = data['title'].values
+        #print(result2)
+        #app.logger.warning(type(result2))
+        app.logger.warning(result2[0])
+        genres[genre] = result2[0]
+        #app.logger.warning(genres[0:5])
+    return genres[0:5]
+
 
 @app.route('/genres', methods=['POST'])
 def genres():
+    genres_selected = dict()
     genre_prefs = json.loads(request.form['jsonval'])
-    genre1 = genre_prefs['genre1']
-    genre2 = genre_prefs['genre2']
-    genre3 = genre_prefs['genre3']
-
-    genres_selected = {genre1: [], genre2: [], genre3: []}
-
+    i = 0
+    for temp in genre_prefs:
+        genres_selected[genre_prefs['genre' + str(i+1)]] = []
+        i = i + 1
 
     popularity_data = pd.read_csv('popular_animes_by_genre.csv')
     genre_list = []
     imgurl_list = []
+    title_list = []
 
     for idx in range(len(popularity_data)):
         if popularity_data['genre'][idx] in genres_selected:
            imgurl_list.append(clean_genres(popularity_data['Popular Animes'][idx]))
            genre_list.append(popularity_data['genre'][idx])
+           title_list.append(gettitlefromgenre(popularity_data['Popular Animes'][idx]))
     
     print(genre_list)
-    return render_template('popular_animes.html', genre=genre_list, imglink=imgurl_list) 
+    return render_template('popular_animes.html', genre=genre_list, imglink=imgurl_list, titles=title_list) 
 
 if __name__ == '__main__':
     app.run(debug=True)

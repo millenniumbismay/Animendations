@@ -132,8 +132,12 @@
 				
 				h2Values.push(h2Value);
 			});
+		data = {};
+		for (let i = 0; i < h2Values.length; i++) {
+			data["genre"+(i+1).toString()] = h2Values[i];
+		}
 
-      data =  {genre1 : h2Values[0], genre2 : h2Values[1], genre3 : h2Values[2]};
+      //data =  {genre1 : h2Values[0], genre2 : h2Values[1], genre3 : h2Values[2]};
       var formInfo = document.forms['send'];
       formInfo.jsonval.value = JSON.stringify(data);
   };
