@@ -13,13 +13,16 @@
     <h1> Popular Animes That You May Like </h1>
     
     {% for img in imglink %}
+    {% set outer_loop = loop %}
     <h2>{{ genre[loop.index - 1] }}</h2>
 	<div class="grid-container">
+        
 	    {% for link in img %}
+        {% set inner_loop = loop %}
 			<div class="grid-item">
                 <img src={{link}} width="200" height="200"/>
+                <p>{{titles[outer_loop.index-1][inner_loop.index-1]}}</p>
             </div>
-        
         {% endfor %}
 	</div>
     {% endfor %}
