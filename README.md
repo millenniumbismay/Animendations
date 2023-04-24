@@ -94,3 +94,11 @@ Architecture: AE(
 7. Name of Model: ```synopsis_autoencoder_50_epochs_Adam.pickle```
 
 The model will be updated with better parameters and reported here if any changes are done
+
+## Content Based Filtering
+Content for Item : `Visual Embedding` and `Synopsis Embeddings`
+
+### Visual - Synopsis Embeddings
+Visual Embeddings - `1x1000`
+Synopsis Embeddings - `1x768`
+RMSE - 2.56
