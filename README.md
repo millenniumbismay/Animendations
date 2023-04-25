@@ -101,4 +101,11 @@ Content for Item : `Visual Embedding` and `Synopsis Embeddings`
 ### Visual - Synopsis Embeddings
 Visual Embeddings - `1x1000`
 Synopsis Embeddings - `1x768`
-RMSE - 2.56
+RMSE - `2.56`
+
+### Matrix Factorization
+Latent Factors: `30`
+epochs: `30`
+lr: `0.001`
+weight_decay: `0.1`
+RMSE - `1.90`
