@@ -109,3 +109,12 @@ epochs: `30`
 lr: `0.001`
 weight_decay: `0.1`
 RMSE - `1.90`
+
+### Content Based Item-Item
+Visual Based content - compressed 50 vit - RMSE = `5.508981653670089`
+Visual Based content - 1000 vit - RMSE = `5.479323797063949`
+Synopsis Based content - 768 mpnet - RMSE = `5.494660646826089`
+Synopsis Based content - 50 mpnet - RMSE = `5.494175340940799`
+Visual + Synopsis Based content - 1000 vit + 768 mpnet - RMSE = `5.479323100865358`
+
+visualk_synopsis_item_item_similarity_matrix - https://drive.google.com/file/d/1FS9uT0P0CaPJrfclzXggi1mEtl6IlHgv/view?usp=share_link
