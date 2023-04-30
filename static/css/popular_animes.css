@@ -13,3 +13,20 @@ h1 {
     padding: 20px;
     text-align: center;
 }
+
+.recommend-btn {
+    float: right;
+    /* width: 120px; */
+    font-size: 25px;
+    background-color: gray;
+    font-family: fantasy;
+    cursor: pointer;
+    border-radius: 15px;
+    padding: 5px 5px;
+    box-shadow: 0 9px #999;
+    border: none;
+}
+
+.recommend-btn:enabled {
+    background-color: green;
+  }

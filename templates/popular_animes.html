@@ -1,31 +1,103 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <meta charset="UTF-8" />
-  <title>Animendations</title>
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <meta name="description" content="" />
-  <link rel="icon" href="favicon.png">
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/popular_animes.css') }}">
 
+<head>
+    <meta charset="UTF-8" />
+    <title>Animendations</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta name="description" content="" />
+    <link rel="icon" href="favicon.png">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/popular_animes.css') }}">
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+
+
+    $(document).ready(function () {
+        $('.submit-btn').on('click', function (event) {
+            event.preventDefault();
+            var title = $(this).siblings('.title').val();
+            var rating = $(this).siblings('.rating').val();
+            const ratingInput = document.querySelector('#rating-input');
+            //const rating = ratingInput.value;
+            var item = localStorage.getItem("userId");
+            if (item == null) {
+                localStorage.setItem("userId", 12345);
+            }
+            event.preventDefault();
+
+
+            //var title = $('#title').val();
+            //var rating = $('#rating').val();
+
+            localStorage.setItem(title, rating);
+            const recommendButton = document.querySelector('#recommend-btn');
+            if (Object.keys(localStorage).length > 3) {
+                recommendButton.disabled = false;
+            } else {
+                recommendButton.disabled = true;
+            }
+        });
+    });
+
+    const recommendButton = document.querySelector('#recommend-btn');
+
+    // Check if local storage has more than 3 items
+    function checkLocalStorage() {
+        if (localStorage.length > 3) {
+            recommendButton.disabled = false;
+        } else {
+            recommendButton.disabled = true;
+        }
+    }
+
+    // Call the checkLocalStorage function when the script is first loaded
+    checkLocalStorage();
+
+    // Add an event listener to update the button state whenever local storage changes
+    window.addEventListener('storage', function (e) {
+        checkLocalStorage();
+    });
+    </script>
 </head>
+
+
 <body>
     <h1> Popular Animes That You May Like </h1>
-    
+    <form method="GET" action="{{ url_for('search') }}">
+        <input type="text" name="query" placeholder="Search...">
+        <button type="submit">Search</button>
+    </form>
+
+    <button id="recommend-btn" name="recommend-btn" class = "recommend-btn" disabled>Get recommended</button>
+
     {% for img in imglink %}
     {% set outer_loop = loop %}
     <h2>{{ genre[loop.index - 1] }}</h2>
-	<div class="grid-container">
-        
-	    {% for link in img %}
+    <div class="grid-container">
+
+        {% for link in img %}
         {% set inner_loop = loop %}
-			<div class="grid-item">
-                <img src={{link}} width="200" height="200"/>
-                <p>{{titles[outer_loop.index-1][inner_loop.index-1]}}</p>
-            </div>
+        <div class="grid-item">
+            <img src={{link}} width="200" height="200" />
+            <p>{{titles[outer_loop.index-1][inner_loop.index-1]}}</p>
+            <input type="hidden" class="title" id="title" name="title"
+                value="{{titles[outer_loop.index-1][inner_loop.index-1]}}">
+            <!--<label for="rating">Rate this movie:</label>-->
+            <!-- <input type="number" class="rating" id="rating" name="rating" min="1" max="10">
+            <input type="submit" class="submit-btn" id="submit-btn" name="submit-btn" value="Submit"> -->
+
+
+
+            <input type="hidden" class="title" value="{{titles[outer_loop.index-1][inner_loop.index-1]}}">
+            <!--<label for="rating">Rate this movie:</label>-->
+            <input type="number" class="rating" min="1" max="10">
+            <button type="button" class="submit-btn">Submit</button>
+        </div>
         {% endfor %}
-	</div>
+    </div>
     {% endfor %}
 
 </body>
+
 </html>
