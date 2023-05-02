@@ -6,6 +6,7 @@ import json
 import torch
 import numpy as np
 from sklearn.metrics.pairwise import cosine_similarity
+import random
 
 app=Flask(__name__)
 
@@ -35,13 +36,11 @@ def compute_content_based_similarity(user_rating, item_similarity):
         if count not in rated_items:
             topitems[uid] = predict_rating(count, user_rating, item_similarity, 2)
         count += 1
-    top_items = sorted(topitems.items(), key=lambda x: x[1], reverse=True)[0:5]
+    top_items = sorted(topitems.items(), key=lambda x: x[1], reverse=True)
     top_items = [x[0] for x in top_items]
     return top_items
 
-def compute_less_MF(P_User, Q, user_rating, num_epochs=5):
-  latent_factors = 30
-
+def compute_less_MF(P_User, Q, user_rating, num_epochs=40):
   a = 0.01
   b = 0.1 
   train_loss = []
@@ -56,7 +55,6 @@ def compute_less_MF(P_User, Q, user_rating, num_epochs=5):
               new_user_p += a * (diff * Q[:, j] - b * new_user_p)
               
   predicted_matrix = np.dot(new_user_p, Q)
-
   return predicted_matrix, new_user_p
      
 
@@ -174,9 +172,10 @@ def recommendations():
     ratings = json.loads(request.form['jsonval'])
     Q = {}
     
-    with open("utils/Q_MF_NCF.pickle", "rb") as f:
+    with open("utils/Q_NCF_NeuMF.pickle", "rb") as f:
         Q = pickle.load(f)
-        Q = Q.weight.data.numpy()
+        # Q = Q.weight.data.numpy()
+        Q = Q.detach().numpy()
 
     vit_50_dict = {}
     with open("dict_1000_vit.pickle", "rb") as f:
@@ -211,6 +210,7 @@ def recommendations():
   
    
     simm_item_ij = cosine_similarity(embeddings)
+    simm_item_ij2 = cosine_similarity(Q)
     
     
     for title in ratings.keys():
@@ -218,15 +218,38 @@ def recommendations():
         user_rating[0][movie_old2new_id_dict[uid]] = ratings[title]
     
     P_User = np.zeros((1, 24)) 
+    top_similar_animes = compute_content_based_similarity(user_rating, simm_item_ij)[0:5]
+
+   
+    sorted_matrix1 = compute_content_based_similarity(user_rating, simm_item_ij2)[0:20]
+
+
     predicted_matrix, new_user_p = compute_less_MF(P_User, Q.T, user_rating)
-    top_similar_animes = compute_content_based_similarity(user_rating, simm_item_ij)
+    sorted_matrix2 = np.argsort(predicted_matrix, axis=None, kind='quicksort')[::-1][0:20]
+
+    random_list1 = []
+
+    for i in range(10):
+        random_list1.append(random.randint(0, 19))
     
-    sorted_matrix = np.argsort(predicted_matrix, axis=None, kind='quicksort')[::-1]
+    random_list2 = []
+
+    for i in range(10):
+        random_list2.append(random.randint(0, 19))
+    
+    sorted_matrix3 = []
+    for i in random_list1:
+        sorted_matrix3.append(sorted_matrix1[i])
+    for j in random_list2:
+        sorted_matrix3.append(sorted_matrix2[j])
+    
+    sorted_matrix3 = list(set(sorted_matrix3))
+    #
     imgurl = [[], []]
     titles = [[], []]
     
     count = 0
-    for uid in sorted_matrix:
+    for uid in sorted_matrix3[0:10]:
         if user_rating[0][uid] == 0:
             if len(imgurl[0]) < 5:
                 imgurl[0].append("/static/zipped_index_based_images/index_based_images/" + str(int(movie_new2old_id_dict[uid])) + ".jpg")
