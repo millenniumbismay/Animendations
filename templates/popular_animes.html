@@ -11,8 +11,19 @@
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
+    function checkLocalStorage() {
+        console.log('here');
+        const recommendButton = document.querySelector('#recommend-btn');
+        var item = JSON.parse(localStorage.getItem("12347"));
+        if (Object.keys(item).length > 3) {
+            recommendButton.disabled = false;
+        } else {
+            recommendButton.disabled = true;
+        }
+    };
 
-
+    $(document).ready(checkLocalStorage);
+    
     $(document).ready(function () {
         $('.submit-btn').on('click', function (event) {
             event.preventDefault();
@@ -20,19 +31,22 @@
             var rating = $(this).siblings('.rating').val();
             const ratingInput = document.querySelector('#rating-input');
             //const rating = ratingInput.value;
-            var item = localStorage.getItem("userId");
+            var item = JSON.parse(localStorage.getItem("12347"));
             if (item == null) {
-                localStorage.setItem("userId", 12345);
+                item = {};
             }
             event.preventDefault();
+            console.log(rating);
+            console.log(title);
+            console.log(item);
+            item[title] = rating;
 
-
+            console.log(item);
             //var title = $('#title').val();
             //var rating = $('#rating').val();
-
-            localStorage.setItem(title, rating);
+            localStorage.setItem('12347', JSON.stringify(item));
             const recommendButton = document.querySelector('#recommend-btn');
-            if (Object.keys(localStorage).length > 3) {
+            if (Object.keys(item).length > 3) {
                 recommendButton.disabled = false;
             } else {
                 recommendButton.disabled = true;
@@ -40,24 +54,10 @@
         });
     });
 
-    const recommendButton = document.querySelector('#recommend-btn');
-
-    // Check if local storage has more than 3 items
-    function checkLocalStorage() {
-        if (localStorage.length > 3) {
-            recommendButton.disabled = false;
-        } else {
-            recommendButton.disabled = true;
-        }
-    }
-
-    // Call the checkLocalStorage function when the script is first loaded
-    checkLocalStorage();
-
-    // Add an event listener to update the button state whenever local storage changes
-    window.addEventListener('storage', function (e) {
-        checkLocalStorage();
-    });
+    function getRatings() {
+        var formInfo = document.forms['recommendeditems'];
+        formInfo.jsonval.value = localStorage.getItem('12347');
+    };
     </script>
 </head>
 
@@ -68,8 +68,10 @@
         <input type="text" name="query" placeholder="Search...">
         <button type="submit">Search</button>
     </form>
-
-    <button id="recommend-btn" name="recommend-btn" class = "recommend-btn" disabled>Get recommended</button>
+    <form id="recommendeditems" action="/recommendations" method="POST" onClick="getRatings()">
+       <button type="submit" id="recommend-btn" class="recommend-btn" disabled> Recommend me more animes! </button>
+       <input type="hidden" name="jsonval" value=""/>
+    </form>
 
     {% for img in imglink %}
     {% set outer_loop = loop %}
