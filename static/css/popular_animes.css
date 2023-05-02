@@ -1,3 +1,7 @@
+body {
+    background-image: url("../zipped_index_based_images/index_based_images/bg.jpg");
+}
+
 h1 {
     text-align:center;
 }
@@ -9,7 +13,7 @@ h1 {
 }
 
 .grid-item {
-    background-color: #ffc3a0;
+    background-color: #f3eae8;
     padding: 20px;
     text-align: center;
 }
@@ -23,7 +27,7 @@ h1 {
     cursor: pointer;
     border-radius: 15px;
     padding: 5px 5px;
-    box-shadow: 0 9px #999;
+    box-shadow: 0 5px #999;
     border: none;
 }
 
